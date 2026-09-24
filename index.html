@@ -27,6 +27,9 @@ form{background:var(--panel);padding:30px;border:1px solid var(--line);border-ra
 footer{border-top:1px solid var(--line);padding:35px 0;color:var(--muted);font-size:13px}.footer{display:flex;justify-content:space-between;gap:20px}
 .reveal{opacity:0;transform:translateY(20px);transition:.7s}.reveal.show{opacity:1;transform:none}
 @media(max-width:800px){.navlinks{display:none}.grid,.about,.steps,.contact{grid-template-columns:1fr}.about-img{min-height:400px}.stats{gap:25px}.hero p{font-size:17px}.row{grid-template-columns:1fr}.cta{padding:40px 25px}.footer{flex-direction:column}}
+
+/* Topmost Fitness chatbot */
+.chat-toggle{position:fixed;right:22px;bottom:22px;z-index:100;width:62px;height:62px;border:0;border-radius:50%;background:var(--accent);color:#090909;font-size:25px;font-weight:900;cursor:pointer;box-shadow:0 12px 35px #0008}.chat-window{position:fixed;right:22px;bottom:96px;z-index:101;width:min(390px,calc(100vw - 28px));height:560px;background:#111;border:1px solid #303030;border-radius:16px;overflow:hidden;box-shadow:0 25px 70px #000b;display:none;flex-direction:column}.chat-window.open{display:flex}.chat-head{padding:17px 18px;background:#171717;border-bottom:1px solid #292929;display:flex;justify-content:space-between;align-items:center}.chat-brand{display:flex;gap:10px;align-items:center}.chat-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#090909;font-weight:900}.chat-head strong{display:block}.chat-head small{color:#aaa}.chat-close{background:none;border:0;color:#aaa;font-size:24px;cursor:pointer}.chat-body{flex:1;overflow:auto;padding:16px;background:#0b0b0b}.chat-msg{max-width:86%;padding:11px 13px;border-radius:12px;margin:8px 0;font-size:14px;white-space:pre-line}.chat-bot{background:#181818;border:1px solid #282828}.chat-user{background:var(--accent);color:#090909;margin-left:auto;font-weight:600}.chat-quick{display:flex;gap:7px;overflow:auto;padding:9px 12px;border-top:1px solid #292929;background:#111}.chat-quick button{white-space:nowrap;border:1px solid #3a3a3a;background:#191919;color:#eee;border-radius:20px;padding:8px 10px;cursor:pointer;font-size:12px}.chat-form{display:flex;gap:8px;padding:12px;background:#151515;border-top:1px solid #292929}.chat-form input{margin:0;flex:1;padding:11px;border-radius:9px}.chat-form button{width:46px;border:0;border-radius:9px;background:var(--accent);font-weight:900;cursor:pointer}
 </style>
 </head>
 <body>
@@ -68,6 +71,14 @@ footer{border-top:1px solid var(--line);padding:35px 0;color:var(--muted);font-s
 <div class="contact-info"><div><span>Phone</span><a href="tel:09027343470">09027343470</a></div><div><span>Location</span>Lagos, Nigeria</div><div><span>Social</span>@mosesfaith580</div></div></div>
 <form id="bookingForm" class="reveal"><div class="row"><div><label>Full Name</label><input required name="name" placeholder="Your name"></div><div><label>Phone Number</label><input required name="phone" placeholder="Your phone"></div></div><div class="row"><div><label>Email</label><input type="email" name="email" placeholder="you@example.com"></div><div><label>Training Goal</label><select name="goal"><option>Weight Loss</option><option>Muscle Building</option><option>Strength</option><option>Athletic Performance</option><option>Mobility</option><option>General Fitness</option></select></div></div><label>Preferred Training Type</label><select name="type"><option>1-on-1 Personal Training</option><option>Strength & Conditioning</option><option>Online Coaching</option><option>Customized Workout Program</option></select><label>Message</label><textarea name="message" placeholder="Tell us a little about your goal..."></textarea><button class="btn" type="submit">Request Booking</button><p id="formMsg" style="font-size:13px;color:#aaa"></p></form></div></section>
 </main>
+
+<button class="chat-toggle" id="chatToggle" aria-label="Open Topmost Fitness chatbot">✦</button>
+<div class="chat-window" id="chatWindow" aria-label="Topmost Fitness assistant">
+<div class="chat-head"><div class="chat-brand"><div class="chat-avatar">TF</div><div><strong>Topmost Assistant</strong><small>Topmost Fitness • Ikorodu</small></div></div><button class="chat-close" id="chatClose" aria-label="Close chat">×</button></div>
+<div class="chat-body" id="chatBody"></div>
+<div class="chat-quick"><button data-q="What services do you offer?">Services</button><button data-q="How much is training?">Price</button><button data-q="Where are you located?">Location</button><button data-q="How do I book?">Book</button></div>
+<form class="chat-form" id="chatForm"><input id="chatInput" autocomplete="off" placeholder="Ask about Topmost Fitness..."><button aria-label="Send">➤</button></form>
+</div>
 <footer><div class="container footer"><div><strong style="color:#fff">TOPMOST<span style="color:var(--accent)">FITNESS</span></strong><br>Train Smarter. Get Stronger. Become Your Best.</div><div>Lagos, Nigeria · 09027343470 · @mosesfaith580</div><div>© <span id="year"></span> Topmost Fitness</div></div></footer>
 <script>
 document.getElementById('year').textContent=new Date().getFullYear();
@@ -80,6 +91,35 @@ document.getElementById('bookingForm').addEventListener('submit',e=>{
  document.getElementById('formMsg').textContent='Your request is ready. Use the WhatsApp button below or contact 09027343470 to confirm your session.';
  const a=document.createElement('a');a.href='https://wa.me/2349027343470?text='+text;a.target='_blank';a.className='btn';a.style.marginTop='8px';a.textContent='Continue on WhatsApp';e.target.appendChild(a);
 });
+
+const TOPMOST_KB={trainer:"Moses Faith",title:"Certified Personal Trainer / Strength & Conditioning Coach",location:"Ikorodu, Lagos, Nigeria",facility:"our own gym",hours:"Every day, 24 hours",experience:"4 years",price:"₦50,000 per month",online:"Yes",group:"No",home:"No",session:"60 minutes",beginners:"Yes",nutrition:"Yes",equipment:"every equipment",refunds:"No refunds",payment:"Bank transfer",phone:"09027343470",audience:"beginners, athletes, men, women, busy professionals, and everyone",services:"Weight Loss, Muscle Building, Strength Training, Athletic Performance, Mobility, General Fitness, Personal Training, and Strength & Conditioning"};
+const TOPMOST_ANSWERS=[
+[["price","cost","how much","50k","₦"],"Personal training at Topmost Fitness is ₦50,000 per month."],
+[["service","offer","what do you do","training"],"Topmost Fitness offers Weight Loss, Muscle Building, Strength Training, Athletic Performance, Mobility, General Fitness, Personal Training, and Strength & Conditioning."],
+[["where","location","located","address","ikorodu"],"Topmost Fitness is located in Ikorodu, Lagos, at its own gym."],
+[["hour","open","time","24"],"The gym is open every day, 24 hours."],
+[["beginner","new","start"],"Yes. Topmost Fitness welcomes beginners and training can be adapted to your current fitness level and goals."],
+[["online"],"Yes, online coaching is available."],
+[["group","class"],"Group training is not currently offered."],
+[["home"],"Home training is not currently offered. Training takes place at the Topmost Fitness gym in Ikorodu."],
+[["session","how long","duration"],"A typical training session is 60 minutes."],
+[["nutrition","diet","food"],"Yes, nutrition guidance is available."],
+[["equipment","machine"],"Topmost Fitness has every equipment needed for its training programs."],
+[["refund","money back"],"Topmost Fitness has a no-refund policy."],
+[["payment","pay","transfer"],"Payment is accepted by bank transfer."],
+[["contact","phone","whatsapp","number"],"You can contact Topmost Fitness on WhatsApp or phone at 09027343470."],
+[["book","booking","appointment","join","register"],"To book a session, send a WhatsApp message to 09027343470 with your name, fitness goal, and preferred training time. You can also use the booking form on this website."],
+[["who","moses","trainer","coach"],"Topmost Fitness is led by Moses Faith, a Certified Personal Trainer / Strength & Conditioning Coach with 4 years of experience."],
+[["clients","men","women","athlete","people"],"Topmost Fitness trains beginners, athletes, men, women, busy professionals, and anyone looking to improve their fitness."],
+[["hello","hi","hey"],"Hi! 👋 I'm the Topmost Fitness assistant. Ask me about services, pricing, location, hours, training, or booking."]
+];
+function topmostReply(q){q=q.toLowerCase();for(const [keys,answer] of TOPMOST_ANSWERS){if(keys.some(k=>q.includes(k)))return answer}return"I can answer questions about Topmost Fitness services, ₦50,000 monthly pricing, Ikorodu location, 24-hour opening, 60-minute sessions, online coaching, nutrition guidance, equipment, payment, and booking. For information I don't have, please contact Moses Faith on 09027343470."}
+const chatToggle=document.getElementById("chatToggle"),chatWindow=document.getElementById("chatWindow"),chatClose=document.getElementById("chatClose"),chatBody=document.getElementById("chatBody"),chatForm=document.getElementById("chatForm"),chatInput=document.getElementById("chatInput");
+function topmostMsg(text,type){const d=document.createElement("div");d.className="chat-msg "+(type==="bot"?"chat-bot":"chat-user");d.textContent=text;chatBody.appendChild(d);chatBody.scrollTop=chatBody.scrollHeight}
+topmostMsg("Hi! 👋 I'm the Topmost Fitness assistant. I can answer questions about our services, pricing, location, hours, training, and booking. How can I help?","bot");
+chatToggle.onclick=()=>{chatWindow.classList.add("open");chatInput.focus()};chatClose.onclick=()=>chatWindow.classList.remove("open");
+chatForm.onsubmit=e=>{e.preventDefault();const t=chatInput.value.trim();if(!t)return;chatInput.value="";topmostMsg(t,"user");setTimeout(()=>topmostMsg(topmostReply(t),"bot"),180)};
+document.querySelectorAll(".chat-quick button").forEach(b=>b.onclick=()=>{const t=b.dataset.q;topmostMsg(t,"user");setTimeout(()=>topmostMsg(topmostReply(t),"bot"),180)});
 </script>
 </body>
 </html>
